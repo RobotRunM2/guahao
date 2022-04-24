@@ -2,7 +2,7 @@
 Author: wdjoys
 Date: 2022-04-23 12:36:07
 LastEditors: wdjoys
-LastEditTime: 2022-04-24 17:39:38
+LastEditTime: 2022-04-24 17:52:41
 FilePath: \guahao\src\start.py
 Description:
 
@@ -55,7 +55,7 @@ def run():
     while True:
         resources = get_hospital_resource_all(robots)
         for r in resources:
-            if r['docName']+r['time'] not in already_notification:
+            if r["enable"] and r['docName']+r['time'] not in already_notification:
                 send_notification(r['time'], r['docName'],
                                   r['other_information'])
                 already_notification.append(r['docName']+r['time'])
