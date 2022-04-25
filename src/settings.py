@@ -2,7 +2,7 @@
 Author: wdjoys
 Date: 2022-04-23 10:24:55
 LastEditors: wdjoys
-LastEditTime: 2022-04-23 13:16:27
+LastEditTime: 2022-04-24 16:40:29
 FilePath: \guahao\src\settings.py
 Description: 
 
@@ -32,5 +32,9 @@ cnfs_bjdxdyyy = {
 }
 
 ROBOTS = [
-    'hospital.bjdxdyyy.Robot',
+    {'ROBOT_PATH': 'hospital.bjdxdyyy',  # 机器人类路径
+     'CNFS': 'cnfs_bjdxdyyy'}  # 机器人类配置文件
 ]
+
+
+WECHAT_TOKEN = '39f568f9-1ddd-435d-bc2d-322b2597e350'
