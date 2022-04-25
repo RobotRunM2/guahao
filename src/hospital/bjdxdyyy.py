@@ -2,7 +2,7 @@
 Author: wdjoys
 Date: 2022-04-23 00:13:41
 LastEditors: wdjoys
-LastEditTime: 2022-04-23 13:17:27
+LastEditTime: 2022-04-25 11:53:23
 FilePath: \guahao\src\hospital\bjdxdyyy.py
 Description:
 
@@ -64,6 +64,11 @@ class Robot():
         if resource['enable']:
             print(resource['time'], resource['docName'], resource['other_information']['registLevel'],
                   resource['other_information']['amount'], resource['other_information']['resourceMemo'])
+
+    def get_regist():
+        """自动挂号
+        """
+        pass
 
 
 if __name__ == '__main__':
