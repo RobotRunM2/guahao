@@ -2,7 +2,7 @@
 Author: wdjoys
 Date: 2022-04-23 00:13:41
 LastEditors: wdjoys
-LastEditTime: 2022-04-25 11:53:23
+LastEditTime: 2022-04-27 16:18:00
 FilePath: \guahao\src\hospital\bjdxdyyy.py
 Description:
 
@@ -10,6 +10,7 @@ Copyright (c) 2022 by github/wdjoys, All Rights Reserved.
 '''
 
 
+import time
 from requests import Session
 
 
@@ -21,6 +22,29 @@ class Robot():
             "=")[1] for cookie in cnfs['cookies'].split("; ")}
         self.session.cookies.update(cookies_dict)
         self.docCodes = cnfs['docCodes']
+        self.hospitalUserID = cnfs['hospitalUserID']
+        self.already_regist = {}
+
+    def is_in_already_regist(self, resourceID):
+        """
+        判断是否已经挂号，返回 True/False
+        若没有挂号，则添加到已挂号列表
+        添加到列表内的号源，5分钟后会过期
+
+        Args:
+            resourceID (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
+
+        current_time = time.time()
+
+        if resourceID in self.already_regist.keys() and current_time - self.already_regist[resourceID] < 300:
+            return True
+        else:
+            self.already_regist["resourceID"] = current_time
+            return False
 
     def get_hospital_resource(self):
         #
@@ -43,6 +67,7 @@ class Robot():
                 day = docResourceResource['day']
                 registLevel1 = docResourceResource['registLevel1']
                 timeEnd = docResourceResource['timeEnd']
+                resourceID = docResourceResource['resourceID']
 
                 time = f'{day} {timeEnd}'
 
@@ -53,6 +78,7 @@ class Robot():
                     "time": time,
                     "enable": enable,
                     "docName": docCode['docName'],
+                    "resourceID": resourceID,
                     "other_information": {
                         "registLevel": registLevel1,
                         "amount": amount,
@@ -65,10 +91,28 @@ class Robot():
             print(resource['time'], resource['docName'], resource['other_information']['registLevel'],
                   resource['other_information']['amount'], resource['other_information']['resourceMemo'])
 
-    def get_regist():
+    def to_register(self):
         """自动挂号
         """
-        pass
+        resources_iterator = self.get_hospital_resource()
+        for resource in resources_iterator:
+            if resource["enable"] and not self.is_in_already_regist(resource["resourceID"]):
+
+                # 提交挂号信息
+                regist_url = "https://fwcbj.linkingcloud.cn/GuaHao/Alipay_RegistApply"
+                response = self.session.post(url=regist_url, data={
+                    "hospitalUserID": self.hospitalUserID,
+                    "resourceID": resource['resourceID'],
+                    "extInfo": '{"continueSubmit":true}'
+                })
+
+                registApplyresult = response.json()
+
+                # 挂号成功推出结果
+                if registApplyresult["responseResult"]["isSuccess"] == "1":
+                    resource["other_information"]["message"] = registApplyresult["responseResult"]["message"]
+                    resource["other_information"]["payUrl"] = "https://fwcbj.linkingcloud.cn/App/dist/index.html#/yuyue/index"
+                    yield resource
 
 
 if __name__ == '__main__':
