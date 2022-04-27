@@ -2,7 +2,7 @@
 Author: wdjoys
 Date: 2022-04-23 12:36:07
 LastEditors: wdjoys
-LastEditTime: 2022-04-24 17:52:41
+LastEditTime: 2022-04-27 16:06:18
 FilePath: \guahao\src\start.py
 Description:
 
@@ -12,7 +12,6 @@ Copyright (c) 2022 by github/wdjoys, All Rights Reserved.
 import itertools
 import random
 import time
-from hospital.bjdxdyyy import Robot as Robot_BJDXDYYY
 from notification.wechat import send_notification
 from settings import ROBOTS
 import string
@@ -37,30 +36,28 @@ robots.append(robot)"""
     return robots
 
 
-def get_hospital_resource_all(robots):
-    '''
-    获取所有医院的号源
-    '''
+def all_hospital_register(robots):
+    """尝试所有医院执行挂号
+    """
+
     resources = []
     for robot in robots:
-        resources.append(robot.get_hospital_resource())
+        resources.append(robot.to_register())
     return itertools.chain(*resources)
 
 
 def run():
     robots = instantiate_all_hospital_robots()
 
-    already_notification = []
     i = 0
     while True:
-        resources = get_hospital_resource_all(robots)
-        for r in resources:
-            if r["enable"] and r['docName']+r['time'] not in already_notification:
-                send_notification(r['time'], r['docName'],
-                                  r['other_information'])
-                already_notification.append(r['docName']+r['time'])
+
+        [send_notification(time=regist_result['time'], docName=regist_result["docName"], other_information=regist_result['other_information'])
+         for regist_result in all_hospital_register(robots)]
+
         i += 1
-        print(f'完成{i}次检查sleep...')
+
+        print(time.time(), f'完成{i}次检查，sleep...',)
         time.sleep(10)
 
 
