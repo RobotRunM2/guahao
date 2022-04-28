@@ -1,35 +1,35 @@
-FROM python:3.8-alpine as build
+FROM python:3.8-alpine as base
 
+# Setup env
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONFAULTHANDLER 1
 
-ENV WORKDIR="GUAHAO"
+FROM base AS python-deps
 
-# 复制项目文件到工作区
-COPY Pipfile Pipfile.lock /$WORKDIR/
+# Install pipenv and compilation dependencies
+RUN pip install pipenv && apk add gcc
 
+# Install python dependencies in /.venv
+COPY Pipfile .
+COPY Pipfile.lock .
+RUN PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy
 
+FROM base AS runtime
 
-WORKDIR /$WORKDIR/
+# Copy virtual env from python-deps stage
+COPY --from=python-deps /.venv /.venv
+ENV PATH="/.venv/bin:$PATH"
 
-# alpine 设置国内软件源
-# pip 安装 whell
-# 通过 wheel 生成包的二进制文件
-RUN set -eux && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories \
-    && apk add --no-cache gcc musl-dev libxslt-dev jpeg-dev zlib-dev libjpeg build-base linux-headers pcre-dev postgresql-dev libffi-dev \
-    && pip install wheel -i https://pypi.tuna.tsinghua.edu.cn/simple --no-cache-dir \
-    && pip wheel -r requirements.txt  -i https://pypi.tuna.tsinghua.edu.cn/simple --wheel-dir=/$WORKDIR/wheels
+# Create and switch to a new user
+RUN adduser -D appuser
+USER appuser
 
-FROM python:3.9-alpine
+# Install application into container
+COPY /src/ /home/appuser/app_guahao
 
-ENV WORKDIR="BenNiu-IoT-PaaS"
-COPY --from=base /$WORKDIR /$WORKDIR
+WORKDIR /home/appuser/app_guahao
 
-WORKDIR /$WORKDIR/
-
-RUN set -eux && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories \
-    && apk add --no-cache libuuid pcre libxml2 mailcap\
-    && pip install --no-index --find-links=/$WORKDIR/wheels -r requirements.txt \
-    && rm -rf wheels
-
-EXPOSE 8088
-
-CMD python main.py
+# Run the application
+ENTRYPOINT ["python", "start.py"]
