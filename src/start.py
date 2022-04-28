@@ -2,7 +2,7 @@
 Author: wdjoys
 Date: 2022-04-23 12:36:07
 LastEditors: wdjoys
-LastEditTime: 2022-04-27 16:06:18
+LastEditTime: 2022-04-28 14:11:34
 FilePath: \guahao\src\start.py
 Description:
 
@@ -25,7 +25,7 @@ def instantiate_all_hospital_robots():
     all_chars = string.ascii_letters
 
     for robot_str in ROBOTS:
-        u_name = ''.join(random.choice(all_chars) for x in range(8))
+        u_name = ''.join(random.choice(all_chars) for _ in range(8))
 
         exec_str = f"""from {robot_str['ROBOT_PATH']} import Robot as {u_name}
 from settings import {robot_str['CNFS']}
@@ -40,9 +40,7 @@ def all_hospital_register(robots):
     """尝试所有医院执行挂号
     """
 
-    resources = []
-    for robot in robots:
-        resources.append(robot.to_register())
+    resources = [robot.to_register() for robot in robots]
     return itertools.chain(*resources)
 
 

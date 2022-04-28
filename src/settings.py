@@ -2,7 +2,7 @@
 Author: wdjoys
 Date: 2022-04-23 10:24:55
 LastEditors: wdjoys
-LastEditTime: 2022-04-27 16:21:07
+LastEditTime: 2022-04-28 09:43:00
 FilePath: \guahao\src\settings.py
 Description: 
 
@@ -30,10 +30,10 @@ cnfs_bjdxdyyy = {
          'docCode': 'BJDXDYYY_3_1_746', },
         {'docName': "吴烨",
          'docCode': 'BJDXDYYY_3_1_825', },
-        {"docName": "王颖",
-         "docCode": "BJDXDYYY_3_1_642", },
-        {"docName": "孙国玉",
-         "docCode": "BJDXDYYY_3_1_1241", },
+        # {"docName": "王颖",
+        #  "docCode": "BJDXDYYY_3_1_642", },
+        # {"docName": "孙国玉",
+        #  "docCode": "BJDXDYYY_3_1_1241", },
 
     ]
 
