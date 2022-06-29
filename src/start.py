@@ -1,4 +1,4 @@
-'''
+"""
 Author: wdjoys
 Date: 2022-04-23 12:36:07
 LastEditors: wdjoys
@@ -7,20 +7,20 @@ FilePath: \guahao\src\start.py
 Description:
 
 Copyright (c) 2022 by github/wdjoys, All Rights Reserved.
-'''
+"""
 
 import itertools
 import random
 import time
 from notification.wechat import send_notification
-from settings import ROBOTS
+from src.config.settings import ROBOTS
 import string
 
 
 def instantiate_all_hospital_robots():
-    '''
+    """
     实例化所有采集器
-    '''
+    """
     robots = []
     all_chars = string.ascii_letters
 

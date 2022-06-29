@@ -2,7 +2,7 @@
 Author: wdjoys
 Date: 2022-04-23 00:13:41
 LastEditors: wdjoys
-LastEditTime: 2022-04-27 16:18:00
+LastEditTime: 2022-06-29 11:34:41
 FilePath: \guahao\src\hospital\bjdxdyyy.py
 Description:
 
@@ -15,6 +15,7 @@ from requests import Session
 
 
 class Robot():
+
     def __init__(self, cnfs):
         self.session = Session()
         self.session.headers.update(cnfs['headers'])
@@ -25,7 +26,7 @@ class Robot():
         self.hospitalUserID = cnfs['hospitalUserID']
         self.already_regist = {}
 
-    def is_in_already_regist(self, resourceID):
+    def is_in_already_regist(self, resourceID) -> bool:
         """
         判断是否已经挂号，返回 True/False
         若没有挂号，则添加到已挂号列表
@@ -71,7 +72,8 @@ class Robot():
 
                 time = f'{day} {timeEnd}'
 
-                enable = False if resourceMemo in "已满停止预约" else True
+                # enable = False if resourceMemo in "已满停止预约" else True
+                enable = resourceMemo not in "已满停止预约"
 
                 yield {
                     # 格式必选
@@ -92,7 +94,7 @@ class Robot():
                   resource['other_information']['amount'], resource['other_information']['resourceMemo'])
 
     def to_register(self):
-        """自动挂号
+        """自动挂号 执行挂号
         """
         resources_iterator = self.get_hospital_resource()
         for resource in resources_iterator:

@@ -23,13 +23,16 @@ COPY --from=python-deps /.venv /.venv
 ENV PATH="/.venv/bin:$PATH"
 
 # Create and switch to a new user
-RUN adduser -D appuser
+RUN adduser -D appuser.0
 USER appuser
 
 # Install application into container
 COPY /src/ /home/appuser/app_guahao
 
 WORKDIR /home/appuser/app_guahao
+
+# 定义配置文件卷
+VOLUME /home/appuser/app_guahao/config
 
 # Run the application
 ENTRYPOINT ["python", "start.py"]
