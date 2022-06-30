@@ -2,7 +2,7 @@
 Author: wdjoys
 Date: 2022-04-23 12:37:27
 LastEditors: wdjoys
-LastEditTime: 2022-04-27 16:50:27
+LastEditTime: 2022-06-30 08:20:12
 FilePath: \guahao\src\notification\wechat.py
 Description: 
 
@@ -10,7 +10,7 @@ Copyright (c) 2022 by github/wdjoys, All Rights Reserved.
 '''
 
 
-from settings import WECHAT_TOKEN
+from config.settings import WECHAT_TOKEN
 from requests import post
 
 
