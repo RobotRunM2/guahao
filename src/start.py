@@ -13,7 +13,7 @@ import itertools
 import random
 import time
 from notification.wechat import send_notification
-from src.config.settings import ROBOTS
+from config.settings import ROBOTS
 import string
 
 
