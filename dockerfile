@@ -23,7 +23,7 @@ COPY --from=python-deps /.venv /.venv
 ENV PATH="/.venv/bin:$PATH"
 
 # Create and switch to a new user
-RUN adduser -D appuser.0
+RUN adduser -D appuser
 USER appuser
 
 # Install application into container
