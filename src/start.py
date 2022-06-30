@@ -28,7 +28,7 @@ def instantiate_all_hospital_robots():
         u_name = ''.join(random.choice(all_chars) for _ in range(8))
 
         exec_str = f"""from {robot_str['ROBOT_PATH']} import Robot as {u_name}
-from settings import {robot_str['CNFS']}
+from config.settings import {robot_str['CNFS']}
 robot = {u_name}({robot_str['CNFS']})
 robots.append(robot)"""
         exec(exec_str)
