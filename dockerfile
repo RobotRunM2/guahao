@@ -36,3 +36,6 @@ VOLUME /home/appuser/app_guahao/config
 
 # Run the application
 ENTRYPOINT ["python", "start.py"]
+
+# run cdm
+# docker run -d --restart=always  -v ~/guahao/config:/home/appuser/app_guahao/config  --name=app_guahao guahao:20220630

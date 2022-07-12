@@ -1,13 +1,14 @@
-"""
+'''
 Author: wdjoys
-Date: 2022-04-23 12:36:07
+Date: 2022-04-24 15:16:14
 LastEditors: wdjoys
-LastEditTime: 2022-04-28 14:11:34
+LastEditTime: 2022-07-04 10:22:34
 FilePath: \guahao\src\start.py
-Description:
+Description: 
 
-Copyright (c) 2022 by github/wdjoys, All Rights Reserved.
-"""
+Copyright (c) 2022 by github/wdjoys, All Rights Reserved. 
+'''
+
 
 import itertools
 import random
@@ -48,6 +49,7 @@ def run():
     robots = instantiate_all_hospital_robots()
 
     i = 0
+    print('程序开始运行...',)
     while True:
 
         [send_notification(time=regist_result['time'], docName=regist_result["docName"], other_information=regist_result['other_information'])
@@ -55,7 +57,7 @@ def run():
 
         i += 1
 
-        print(time.time(), f'完成{i}次检查，sleep...',)
+        print(f'完成{i}次检查，sleep...',)
         time.sleep(10)
 
 
