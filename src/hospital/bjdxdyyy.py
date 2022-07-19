@@ -2,7 +2,7 @@
 Author: wdjoys
 Date: 2022-04-23 00:13:41
 LastEditors: wdjoys
-LastEditTime: 2022-06-29 11:34:41
+LastEditTime: 2022-07-19 09:54:31
 FilePath: \guahao\src\hospital\bjdxdyyy.py
 Description:
 
@@ -38,10 +38,16 @@ class Robot():
         Returns:
             _type_: _description_
         """
+        '''
+        {
+            "resourceID":"time"
+        }
+
+        '''
 
         current_time = time.time()
 
-        if resourceID in self.already_regist.keys() and current_time - self.already_regist[resourceID] < 300:
+        if resourceID in self.already_regist.keys() and current_time - self.already_regist[resourceID] < 10:
             return True
         else:
             self.already_regist["resourceID"] = current_time
@@ -98,7 +104,10 @@ class Robot():
         """
         resources_iterator = self.get_hospital_resource()
         for resource in resources_iterator:
+            # print(resource["docName"],
+            #       resource["other_information"]["resourceMemo"], resource["enable"])
             if resource["enable"] and not self.is_in_already_regist(resource["resourceID"]):
+                # print("挂号中...")
 
                 # 提交挂号信息
                 regist_url = "https://fwcbj.linkingcloud.cn/GuaHao/Alipay_RegistApply"
@@ -109,7 +118,7 @@ class Robot():
                 })
 
                 registApplyresult = response.json()
-
+                # print(registApplyresult)
                 # 挂号成功推出结果
                 if registApplyresult["responseResult"]["isSuccess"] == "1":
                     resource["other_information"]["message"] = registApplyresult["responseResult"]["message"]
