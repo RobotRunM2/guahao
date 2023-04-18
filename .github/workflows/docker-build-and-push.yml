@@ -1,7 +1,7 @@
 # @Author: xiaocao
 # @Date:   2023-04-18 22:08:30
 # @Last Modified by:   xiaocao
-# @Last Modified time: 2023-04-18 22:15:02
+# @Last Modified time: 2023-04-18 22:22:31
 
 name: ci
 
@@ -25,6 +25,6 @@ jobs:
           image: wdjoys/guahao
           tags: v1, latest
           registry: docker.io
-          dockerfile: Dockerfile
+          dockerfile: dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
