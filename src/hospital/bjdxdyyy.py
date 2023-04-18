@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+# @Author: xiaocao
+# @Date:   2022-04-24 15:16:14
+# @Last Modified by:   xiaocao
+# @Last Modified time: 2023-04-18 14:01:10
 '''
 Author: wdjoys
 Date: 2022-04-23 00:13:41
@@ -49,9 +54,8 @@ class Robot():
 
         if resourceID in self.already_regist.keys() and current_time - self.already_regist[resourceID] < 10:
             return True
-        else:
-            self.already_regist["resourceID"] = current_time
-            return False
+        self.already_regist["resourceID"] = current_time
+        return False
 
     def get_hospital_resource(self):
         #
