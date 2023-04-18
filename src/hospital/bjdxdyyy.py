@@ -1,8 +1,13 @@
+# -*- coding: utf-8 -*-
+# @Author: xiaocao
+# @Date:   2022-04-24 15:16:14
+# @Last Modified by:   xiaocao
+# @Last Modified time: 2023-04-18 14:01:10
 '''
 Author: wdjoys
 Date: 2022-04-23 00:13:41
 LastEditors: wdjoys
-LastEditTime: 2022-04-27 16:18:00
+LastEditTime: 2022-07-19 09:54:31
 FilePath: \guahao\src\hospital\bjdxdyyy.py
 Description:
 
@@ -15,6 +20,7 @@ from requests import Session
 
 
 class Robot():
+
     def __init__(self, cnfs):
         self.session = Session()
         self.session.headers.update(cnfs['headers'])
@@ -25,7 +31,7 @@ class Robot():
         self.hospitalUserID = cnfs['hospitalUserID']
         self.already_regist = {}
 
-    def is_in_already_regist(self, resourceID):
+    def is_in_already_regist(self, resourceID) -> bool:
         """
         判断是否已经挂号，返回 True/False
         若没有挂号，则添加到已挂号列表
@@ -37,14 +43,19 @@ class Robot():
         Returns:
             _type_: _description_
         """
+        '''
+        {
+            "resourceID":"time"
+        }
+
+        '''
 
         current_time = time.time()
 
-        if resourceID in self.already_regist.keys() and current_time - self.already_regist[resourceID] < 300:
+        if resourceID in self.already_regist.keys() and current_time - self.already_regist[resourceID] < 10:
             return True
-        else:
-            self.already_regist["resourceID"] = current_time
-            return False
+        self.already_regist["resourceID"] = current_time
+        return False
 
     def get_hospital_resource(self):
         #
@@ -71,7 +82,8 @@ class Robot():
 
                 time = f'{day} {timeEnd}'
 
-                enable = False if resourceMemo in "已满停止预约" else True
+                # enable = False if resourceMemo in "已满停止预约" else True
+                enable = resourceMemo not in "已满停止预约"
 
                 yield {
                     # 格式必选
@@ -92,11 +104,14 @@ class Robot():
                   resource['other_information']['amount'], resource['other_information']['resourceMemo'])
 
     def to_register(self):
-        """自动挂号
+        """自动挂号 执行挂号
         """
         resources_iterator = self.get_hospital_resource()
         for resource in resources_iterator:
+            # print(resource["docName"],
+            #       resource["other_information"]["resourceMemo"], resource["enable"])
             if resource["enable"] and not self.is_in_already_regist(resource["resourceID"]):
+                # print("挂号中...")
 
                 # 提交挂号信息
                 regist_url = "https://fwcbj.linkingcloud.cn/GuaHao/Alipay_RegistApply"
@@ -107,7 +122,7 @@ class Robot():
                 })
 
                 registApplyresult = response.json()
-
+                # print(registApplyresult)
                 # 挂号成功推出结果
                 if registApplyresult["responseResult"]["isSuccess"] == "1":
                     resource["other_information"]["message"] = registApplyresult["responseResult"]["message"]

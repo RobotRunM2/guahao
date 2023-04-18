@@ -1,34 +1,40 @@
+# -*- coding: utf-8 -*-
+# @Author: xiaocao
+# @Date:   2022-04-24 15:16:14
+# @Last Modified by:   xiaocao
+# @Last Modified time: 2023-04-18 11:57:46
 '''
 Author: wdjoys
-Date: 2022-04-23 12:36:07
+Date: 2022-04-24 15:16:14
 LastEditors: wdjoys
-LastEditTime: 2022-04-27 16:06:18
+LastEditTime: 2022-07-19 09:52:57
 FilePath: \guahao\src\start.py
-Description:
+Description: 
 
-Copyright (c) 2022 by github/wdjoys, All Rights Reserved.
+Copyright (c) 2022 by github/wdjoys, All Rights Reserved. 
 '''
+
 
 import itertools
 import random
 import time
 from notification.wechat import send_notification
-from settings import ROBOTS
+from config.settings import ROBOTS
 import string
 
 
 def instantiate_all_hospital_robots():
-    '''
+    """
     实例化所有采集器
-    '''
+    """
     robots = []
     all_chars = string.ascii_letters
 
     for robot_str in ROBOTS:
-        u_name = ''.join(random.choice(all_chars) for x in range(8))
+        u_name = ''.join(random.choice(all_chars) for _ in range(8))
 
         exec_str = f"""from {robot_str['ROBOT_PATH']} import Robot as {u_name}
-from settings import {robot_str['CNFS']}
+from config.settings import {robot_str['CNFS']}
 robot = {u_name}({robot_str['CNFS']})
 robots.append(robot)"""
         exec(exec_str)
@@ -40,9 +46,7 @@ def all_hospital_register(robots):
     """尝试所有医院执行挂号
     """
 
-    resources = []
-    for robot in robots:
-        resources.append(robot.to_register())
+    resources = [robot.to_register() for robot in robots]
     return itertools.chain(*resources)
 
 
@@ -50,6 +54,7 @@ def run():
     robots = instantiate_all_hospital_robots()
 
     i = 0
+    print('程序开始运行...',)
     while True:
 
         [send_notification(time=regist_result['time'], docName=regist_result["docName"], other_information=regist_result['other_information'])
@@ -57,7 +62,7 @@ def run():
 
         i += 1
 
-        print(time.time(), f'完成{i}次检查，sleep...',)
+        print(f'完成{i}次检查，sleep...',)
         time.sleep(10)
 
 
