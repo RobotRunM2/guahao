@@ -2,7 +2,7 @@
 # @Author: xiaocao
 # @Date:   2022-04-24 15:16:14
 # @Last Modified by:   xiaocao
-# @Last Modified time: 2023-04-18 11:57:46
+# @Last Modified time: 2023-04-18 22:00:20
 '''
 Author: wdjoys
 Date: 2022-04-24 15:16:14
@@ -62,7 +62,8 @@ def run():
 
         i += 1
 
-        print(f'完成{i}次检查，sleep...',)
+        if i % 180 == 0:
+            print(f'已经完成{i}次检查，sleep...',)
         time.sleep(10)
 
 

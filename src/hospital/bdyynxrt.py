@@ -2,7 +2,7 @@
 # @Author: xiaocao
 # @Date:   2023-04-18 16:43:10
 # @Last Modified by:   xiaocao
-# @Last Modified time: 2023-04-18 18:43:29
+# @Last Modified time: 2023-04-18 21:49:35
 
 
 # 北大医院宁夏儿童医院
@@ -27,11 +27,11 @@ class Robot(BaseRobot):
     def getDocterSched(self):
         # 推出可以挂号的医生排班id schId
         for docCode in self.docCodes:
-            res = self.session.post(url="http://36.103.228.223:7070/visualizedPlatformtest/reservation/getDoctor", data={"requestStr": """{"account": "wechat", "password": "wechat2018", "param": {
-                                    "docName": "", "depId": "40283c788004b6f2018370dee9047142", "patientFlow": "40283c7783c0003b0183c11921a91bc9", "hosCode": "10003", "startDate": "2023-04-18", "endDate": "2023-04-24", "isWithSchedule": "1", "isScheduleDoctor": "1"}}"""})
+            res = self.session.post(url="http://36.103.228.223:7070/visualizedPlatformtest/reservation/getDoctor", data={"requestStr": f"""{{"account": "wechat", "password": "wechat2018", "param": {{
+                                    "docId": "{docCode['docId']}", "isWithSchedule": "1", "isScheduleDoctor": "1"}}}}"""})
             OrderDocSources = res.json()
             for schedule in OrderDocSources['record'][0]['scheduleList']:
-                if schedule['schState'] == '0':
+                if schedule['schState'] == '1' and schedule['stopMark'] == 'Y':
                     yield schedule['schId']
 
     def getSchedSurplusCode(self, schId):
@@ -41,14 +41,18 @@ class Robot(BaseRobot):
         result = res.json()
 
         for section in result["data"]['section']:
-            if section['segState'] != "1":
+            if section['segState'] != "1" and not self.is_in_already_regist(section['segFlow']):
+
                 yield {
-                    "time": section['secCode'],
+                    "time": section['startTime'],
                     "docName": result["data"]['docName'],
-                    "other_information": ''
+                    "other_information": {
+                        'amount': result["data"]['registerFee'],
+                        "registLevel": result["data"]['principalship'],
+                        "message": "查询到余号",
+                        "payUrl": ""
+                    }
                 }
-            else:
-                print(section['secCode'], '没有号')
 
     def to_register(self):
         for schId in self.getDocterSched():

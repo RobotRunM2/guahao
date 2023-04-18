@@ -2,7 +2,7 @@
 # @Author: xiaocao
 # @Date:   2023-04-18 16:48:41
 # @Last Modified by:   xiaocao
-# @Last Modified time: 2023-04-18 17:19:25
+# @Last Modified time: 2023-04-18 21:54:47
 
 
 import time
@@ -35,9 +35,9 @@ class BaseRobot:
         current_time = time.time()
 
         # 180秒内不重复报警
-        if resourceID in self.already_regist.keys() and current_time - self.already_regist[resourceID] < 180:
+        if resourceID in self.already_regist.keys() and current_time - self.already_regist[resourceID] < 300:
             return True
-        self.already_regist["resourceID"] = current_time
+        self.already_regist[resourceID] = current_time
         return False
 
     def to_register(self):

@@ -2,7 +2,7 @@
 # @Author: xiaocao
 # @Date:   2022-04-24 15:16:14
 # @Last Modified by:   xiaocao
-# @Last Modified time: 2023-04-18 18:30:03
+# @Last Modified time: 2023-04-18 21:55:42
 '''
 Author: wdjoys
 Date: 2022-04-24 15:16:14
@@ -63,15 +63,10 @@ cnfs_bdyynxrt = {    # 是否运行
     # 要监控的医生号源
     "docCodes": [
         {'docName': "姜玉武",
-         'docCode': 'BJDXDYYY_3_1_746', },
-        {'docName': "吴烨",
-         'docCode': 'BJDXDYYY_3_1_825', },
-        {"docName": "包新华",
-         "docCode": "BJDXDYYY_3_1_792"},
-        # {"docName": "王颖",
-        #  "docCode": "BJDXDYYY_3_1_642", },
-        # {"docName": "孙国玉",
-        #  "docCode": "BJDXDYYY_3_1_1241", },
+         'docId': '40283c788636bcac0187137e5b3e469f'},
+        # {'docName': "魏翠洁",
+        #  'docId': '40283c787fdae031017fdb0432fd028f'},
+
 
     ]
 }
