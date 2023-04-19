@@ -38,4 +38,5 @@ VOLUME /home/appuser/app_guahao/config
 ENTRYPOINT ["python", "start.py"]
 
 # run cdm
-# docker run -d --restart=always  -v ~/guahao/config:/home/appuser/app_guahao/config  --name=app_guahao guahao:20220630
+# run 命令使用 i t 参数  print 内容会实时刷新到 logs 内 设置时区
+# docker run -dit --restart=always  -e TZ="Asia/Shanghai" -v ~/guahao/config:/home/appuser/app_guahao/config  --name=app_guahao wdjoys/guahao
