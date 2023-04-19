@@ -2,7 +2,7 @@
 # @Author: xiaocao
 # @Date:   2022-04-24 15:16:14
 # @Last Modified by:   xiaocao
-# @Last Modified time: 2023-04-18 22:00:20
+# @Last Modified time: 2023-04-19 08:57:56
 '''
 Author: wdjoys
 Date: 2022-04-24 15:16:14
@@ -51,10 +51,14 @@ def all_hospital_register(robots):
 
 
 def run():
+
+    print('程序开始运行...', 1,)
+    # 实例化所有采集机器人
     robots = instantiate_all_hospital_robots()
 
+    # 定义变量记录执行次数
     i = 0
-    print('程序开始运行...',)
+
     while True:
 
         [send_notification(time=regist_result['time'], docName=regist_result["docName"], other_information=regist_result['other_information'])
@@ -62,8 +66,10 @@ def run():
 
         i += 1
 
-        if i % 180 == 0:
+        # 180次 也就是 1800秒打印一次日志
+        if i % 180 == 0 or i == 1:
             print(f'已经完成{i}次检查，sleep...',)
+        # 间隔10执行一次
         time.sleep(10)
 
 
