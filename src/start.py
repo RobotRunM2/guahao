@@ -2,7 +2,7 @@
 # @Author: xiaocao
 # @Date:   2022-04-24 15:16:14
 # @Last Modified by:   xiaocao
-# @Last Modified time: 2023-04-19 08:57:56
+# @Last Modified time: 2023-04-19 09:16:40
 '''
 Author: wdjoys
 Date: 2022-04-24 15:16:14
@@ -52,13 +52,16 @@ def all_hospital_register(robots):
 
 def run():
 
-    print('程序开始运行...', 1,)
+    print('程序开始运行...', )
     # 实例化所有采集机器人
+    print('开始实例化机器人...', )
     robots = instantiate_all_hospital_robots()
+    print('结束实例化机器人...', )
 
     # 定义变量记录执行次数
     i = 0
 
+    print('开始执行余号监测...', )
     while True:
 
         [send_notification(time=regist_result['time'], docName=regist_result["docName"], other_information=regist_result['other_information'])
